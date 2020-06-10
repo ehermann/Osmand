@@ -22,7 +22,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
-import net.osmand.GPXUtilities.GPXTrackAnalysis;
+	import net.osmand.GPXUtilities.GPXTrackAnalysis;
 import net.osmand.plus.OsmAndFormatter;
 import net.osmand.plus.R;
 import net.osmand.plus.activities.MapActivity;

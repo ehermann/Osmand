@@ -177,6 +177,7 @@ public class OsmandAidlApi {
 
 	private static final String AIDL_EXECUTE_QUICK_ACTION = "aidl_execute_quick_action";
 	private static final String AIDL_QUICK_ACTION_NUMBER = "aidl_quick_action_number";
+	private static final String AIDL_TOGGLE_LOCK = "aidl_toggle_lock";
 
 
 	private static final ApplicationMode DEFAULT_PROFILE = ApplicationMode.CAR;
@@ -853,7 +854,19 @@ public class OsmandAidlApi {
 		};
 		registerReceiver(executeQuickActionReceiver, mapActivity, AIDL_EXECUTE_QUICK_ACTION);
 	}
-
+	private void registerToggleLockReceiver(MapActivity mapActivity) {
+		final WeakReference<MapActivity> mapActivityRef = new WeakReference<>(mapActivity);
+		BroadcastReceiver toggleLockReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				MapActivity mapActivity = mapActivityRef.get();
+				if (mapActivity != null) {
+					mapActivity.lock();
+				}
+			}
+		};
+		registerReceiver(toggleLockReceiver, mapActivity, AIDL_TOGGLE_LOCK);
+	}
 	public void registerMapLayers(@NonNull MapActivity mapActivity) {
 		for (ConnectedApp connectedApp : connectedApps.values()) {
 			connectedApp.registerMapLayers(mapActivity);
@@ -1667,7 +1680,12 @@ public class OsmandAidlApi {
 		app.sendBroadcast(intent);
 		return true;
 	}
-
+	boolean toggleLock() {
+		Intent intent = new Intent();
+		intent.setAction(AIDL_TOGGLE_LOCK);
+		app.sendBroadcast(intent);
+		return true;
+	}
 	boolean muteNavigation() {
 		Intent intent = new Intent();
 		intent.setAction(AIDL_MUTE_NAVIGATION);

@@ -83,6 +83,7 @@ import net.osmand.aidlapi.note.TakePhotoNoteParams;
 import net.osmand.aidlapi.plugins.PluginParams;
 import net.osmand.aidlapi.quickaction.QuickActionInfoParams;
 import net.osmand.aidlapi.quickaction.QuickActionParams;
+import net.osmand.aidlapi.lock.ToggleLockParams;
 import net.osmand.aidlapi.search.SearchParams;
 import net.osmand.aidlapi.search.SearchResult;
 import net.osmand.aidlapi.tiles.ASqliteDbFile;
@@ -1254,6 +1255,16 @@ public class OsmandAidlServiceV2 extends Service implements AidlCallbackListener
 			try {
 				OsmandAidlApi api = getApi("getQuickActionsInfo");
 				return api != null && api.getQuickActionsInfoV2(quickActions);
+			} catch (Exception e) {
+				handleException(e);
+				return false;
+			}
+		}
+		@Override
+		public boolean toggleLock(ToggleLockParams params) {
+			try {
+				OsmandAidlApi api = getApi("toggleLock");
+				return api != null && api.stopNavigation();
 			} catch (Exception e) {
 				handleException(e);
 				return false;

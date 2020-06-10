@@ -856,4 +856,5 @@ interface IOsmAndAidlInterface {
     boolean executeQuickAction(in QuickActionParams params);
 
     boolean getQuickActionsInfo(out List<QuickActionInfoParams> quickActions);
+
 }

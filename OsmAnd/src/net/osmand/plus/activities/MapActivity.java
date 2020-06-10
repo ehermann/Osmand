@@ -1401,6 +1401,9 @@ public class MapActivity extends OsmandActionBarActivity implements DownloadEven
 	public RoutingHelper getRoutingHelper() {
 		return app.getRoutingHelper();
 	}
+	public LockHelper getLockerHelper() {
+		return lockHelper;
+	}
 
 	@Override
 	protected void onPause() {
