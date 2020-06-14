@@ -102,9 +102,21 @@ public class LockHelper implements SensorEventListener {
 			wakeLock = null;
 		}
 	}
+	public void toggleLock()
+	{
+		PowerManager pm = (PowerManager) app.getSystemService(Context.POWER_SERVICE);
+		boolean isScreenOn = pm.isInteractive();
+		if(isScreenOn)
+		{
+			//lock();
+		}
+		else{
+			timedUnlock(0);
+		}
 
+	}
 	@SuppressLint("WakelockTimeout")
-	private void unlock() {
+	public void unlock() {
 		if (lockUIAdapter != null) {
 			lockUIAdapter.unlock();
 		}
@@ -116,7 +128,7 @@ public class LockHelper implements SensorEventListener {
 		}
 	}
 
-	private void lock() {
+	public void lock() {
 		releaseWakeLocks();
 		if (lockUIAdapter != null) {
 			boolean useSystemTimeout = useSystemScreenTimeout.get();

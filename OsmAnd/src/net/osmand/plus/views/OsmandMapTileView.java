@@ -901,7 +901,7 @@ public class OsmandMapTileView implements IMapDownloaderCallback {
 		}
 	}
 
-	protected void setLatLonAnimate(double latitude, double longitude, boolean notify) {
+	public void setLatLonAnimate(double latitude, double longitude, boolean notify) {
 		currentViewport.setLatLonCenter(latitude, longitude);
 		refreshMap();
 		if (locationListener != null && notify) {

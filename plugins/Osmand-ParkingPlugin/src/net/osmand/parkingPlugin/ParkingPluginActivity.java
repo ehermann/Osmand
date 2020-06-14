@@ -13,7 +13,7 @@ import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
 
-public class ParkingPluginActivity extends Activity {
+public class 	ParkingPluginActivity extends Activity {
 	private static final String OSMAND_COMPONENT = "net.osmand"; //$NON-NLS-1$
 	private static final String OSMAND_COMPONENT_PLUS = "net.osmand.plus"; //$NON-NLS-1$
 	private static final String OSMAND_ACTIVITY = "net.osmand.plus.activities.MapActivity"; //$NON-NLS-1$

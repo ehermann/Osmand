@@ -1264,7 +1264,7 @@ public class OsmandAidlServiceV2 extends Service implements AidlCallbackListener
 		public boolean toggleLock(ToggleLockParams params) {
 			try {
 				OsmandAidlApi api = getApi("toggleLock");
-				return api != null && api.stopNavigation();
+				return api != null && api.toggleLock();
 			} catch (Exception e) {
 				handleException(e);
 				return false;

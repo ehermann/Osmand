@@ -45,6 +45,7 @@ import net.osmand.plus.settings.backend.ApplicationMode;
 import net.osmand.plus.settings.backend.OsmandSettings;
 import net.osmand.plus.settings.fragments.BaseSettingsFragment;
 import net.osmand.plus.skimapsplugin.SkiMapsPlugin;
+import net.osmand.plus.cycloplugin.CycloPlugin;
 import net.osmand.plus.srtmplugin.SRTMPlugin;
 import net.osmand.plus.views.OsmandMapTileView;
 import net.osmand.util.Algorithms;
@@ -274,8 +275,14 @@ public abstract class OsmandPlugin {
 		checkMarketPlugin(app, enabledPlugins, new NauticalMapsPlugin(app));
 		checkMarketPlugin(app, enabledPlugins, new SkiMapsPlugin(app));
 
+
 		allPlugins.add(new AudioVideoNotesPlugin(app));
 		checkMarketPlugin(app, enabledPlugins, new ParkingPositionPlugin(app));
+		//checkMarketPlugin(app, enabledPlugins, new CycloPlugin(app));
+
+		allPlugins.add(new CycloPlugin(app));
+
+
 		allPlugins.add(new AccessibilityPlugin(app));
 		allPlugins.add(new OsmEditingPlugin(app));
 		allPlugins.add(new OsmandDevelopmentPlugin(app));
@@ -539,7 +546,9 @@ public abstract class OsmandPlugin {
 	public boolean mapActivityKeyUp(MapActivity mapActivity, int keyCode) {
 		return false;
 	}
-
+	public boolean mapActivityKeyDown(MapActivity mapActivity, int keyCode) {
+		return false;
+	}
 	public void onMapActivityExternalResult(int requestCode, int resultCode, Intent data) {
 	}
 
@@ -819,7 +828,13 @@ public abstract class OsmandPlugin {
 		}
 		return false;
 	}
-
+	public static boolean onMapActivityKeyDown(MapActivity mapActivity, int keyCode) {
+		for (OsmandPlugin p : getEnabledPlugins()) {
+			if (p.mapActivityKeyDown(mapActivity, keyCode))
+				return true;
+		}
+		return false;
+	}
 	public static void registerQuickActionTypesPlugins(List<QuickActionType> quickActionTypes) {
 		for (OsmandPlugin p : getEnabledPlugins()) {
 			quickActionTypes.addAll(p.getQuickActionTypes());
@@ -884,3 +899,4 @@ public abstract class OsmandPlugin {
 		return preference;
 	}
 }
+

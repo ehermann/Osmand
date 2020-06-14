@@ -43,6 +43,7 @@ import net.osmand.data.PointDescription;
 import net.osmand.plus.AppInitializer;
 import net.osmand.plus.AppInitializer.AppInitializeListener;
 import net.osmand.plus.AppInitializer.InitEvents;
+import net.osmand.plus.helpers.LockHelper;
 import net.osmand.plus.settings.backend.ApplicationMode;
 import net.osmand.plus.ContextMenuAdapter;
 import net.osmand.plus.ContextMenuItem;
@@ -224,6 +225,7 @@ public class OsmandAidlApi {
 		registerPauseNavigationReceiver(mapActivity);
 		registerResumeNavigationReceiver(mapActivity);
 		registerStopNavigationReceiver(mapActivity);
+		registerToggleLockReceiver(mapActivity);
 		registerMuteNavigationReceiver(mapActivity);
 		registerUnmuteNavigationReceiver(mapActivity);
 		registerShowSqliteDbFileReceiver(mapActivity);
@@ -854,14 +856,22 @@ public class OsmandAidlApi {
 		};
 		registerReceiver(executeQuickActionReceiver, mapActivity, AIDL_EXECUTE_QUICK_ACTION);
 	}
+	static Boolean locked=false;
+
 	private void registerToggleLockReceiver(MapActivity mapActivity) {
 		final WeakReference<MapActivity> mapActivityRef = new WeakReference<>(mapActivity);
 		BroadcastReceiver toggleLockReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				MapActivity mapActivity = mapActivityRef.get();
+
+
 				if (mapActivity != null) {
-					mapActivity.lock();
+					LockHelper lh=mapActivity.getLockerHelper();
+					if(lh!=null)
+						lh.toggleLock();
+
+
 				}
 			}
 		};

@@ -96,6 +96,7 @@ public class DashPluginsFragment extends DashBaseFragment {
 	private void initPlugins() {
 		List<OsmandPlugin> notActivePlugins = OsmandPlugin.getNotEnabledVisiblePlugins();
 		notActivePlugins.remove(OsmandPlugin.getPlugin(SkiMapsPlugin.class));
+
 		notActivePlugins.remove(OsmandPlugin.getPlugin(NauticalMapsPlugin.class));
 		Collections.shuffle(notActivePlugins);
 

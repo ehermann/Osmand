@@ -1,5 +1,17 @@
+plugins {
+	id "net.rdrei.android.buildtimetracker" version "0.11.0"
+}
 apply plugin: 'com.android.application'
 
+buildtimetracker {
+	reporters {
+		summary {
+			ordered false
+			threshold 50
+			barstyle 'unicode'
+		}
+	}
+}
 // Global Parameters accepted
 // TARGET_APP_NAME    - app name
 // APK_NUMBER_VERSION - version number of apk
@@ -521,6 +533,7 @@ dependencies {
 	implementation project(path: ':OsmAnd-java', configuration: 'android')
 	implementation project(':OsmAnd-api')
 	implementation 'androidx.multidex:multidex:2.0.1'
+	implementation 'androidx.media:media:1.1.0'
 	implementation 'androidx.gridlayout:gridlayout:1.0.0'
 	implementation 'androidx.cardview:cardview:1.0.0'
 	implementation 'androidx.appcompat:appcompat:1.1.0'

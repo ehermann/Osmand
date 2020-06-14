@@ -1545,6 +1545,8 @@ public class MapActivity extends OsmandActionBarActivity implements DownloadEven
 			return true;
 		} else if (mapScrollHelper.isScrollingDirectionKeyCode(keyCode)) {
 			return mapScrollHelper.onKeyDown(keyCode, event);
+		}else if (OsmandPlugin.onMapActivityKeyDown(this, keyCode)) {
+			return true;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
