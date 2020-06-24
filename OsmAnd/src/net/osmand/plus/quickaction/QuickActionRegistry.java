@@ -15,6 +15,7 @@ import com.google.gson.reflect.TypeToken;
 
 import net.osmand.plus.OsmandApplication;
 import net.osmand.plus.OsmandPlugin;
+import net.osmand.plus.quickaction.actions.ShowHideMapillaryAction;
 import net.osmand.plus.settings.backend.OsmandSettings;
 import net.osmand.plus.R;
 import net.osmand.plus.quickaction.actions.DayNightModeAction;
@@ -30,7 +31,6 @@ import net.osmand.plus.quickaction.actions.NavReplaceDestinationAction;
 import net.osmand.plus.quickaction.actions.NavResumePauseAction;
 import net.osmand.plus.quickaction.actions.NavStartStopAction;
 import net.osmand.plus.quickaction.actions.NavVoiceAction;
-import net.osmand.plus.quickaction.actions.NewAction;
 import net.osmand.plus.quickaction.actions.ShowHideFavoritesAction;
 import net.osmand.plus.quickaction.actions.ShowHideGpxTracksAction;
 import net.osmand.plus.quickaction.actions.ShowHidePoiAction;
@@ -215,7 +215,6 @@ public class QuickActionRegistry {
 
 	public List<QuickActionType> updateActionTypes() {
 		List<QuickActionType> quickActionTypes = new ArrayList<>();
-		quickActionTypes.add(NewAction.TYPE);
 		quickActionTypes.add(FavoriteAction.TYPE);
 		quickActionTypes.add(GPXAction.TYPE);
 		quickActionTypes.add(MarkerAction.TYPE);
@@ -226,6 +225,7 @@ public class QuickActionRegistry {
 		quickActionTypes.add(MapStyleAction.TYPE);
 		quickActionTypes.add(DayNightModeAction.TYPE);
 		quickActionTypes.add(ShowHideTransportLinesAction.TYPE);
+		quickActionTypes.add(ShowHideMapillaryAction.TYPE);
 		// navigation
 		quickActionTypes.add(NavVoiceAction.TYPE);
 		quickActionTypes.add(NavDirectionsFromAction.TYPE);

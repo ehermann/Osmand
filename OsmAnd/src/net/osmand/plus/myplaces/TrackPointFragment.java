@@ -67,7 +67,7 @@ import net.osmand.plus.activities.OsmandActionBarActivity;
 import net.osmand.plus.activities.OsmandBaseExpandableListAdapter;
 import net.osmand.plus.activities.SavingTrackHelper;
 import net.osmand.plus.activities.TrackActivity;
-import net.osmand.plus.base.FavoriteImageDrawable;
+import net.osmand.plus.base.PointImageDrawable;
 import net.osmand.plus.base.OsmandExpandableListFragment;
 import net.osmand.plus.mapmarkers.CoordinateInputDialogFragment;
 import net.osmand.plus.myplaces.TrackBitmapDrawer.TrackBitmapDrawerListener;
@@ -393,7 +393,7 @@ public class TrackPointFragment extends OsmandExpandableListFragment implements 
 
 		if (!mi.isActionViewExpanded()) {
 
-			createMenuItem(menu, SHARE_ID, R.string.shared_string_share, R.drawable.ic_action_gshare_dark, MenuItem.SHOW_AS_ACTION_NEVER);
+			createMenuItem(menu, SHARE_ID, R.string.shared_string_share, R.drawable.ic_action_gshare_dark, MenuItem.SHOW_AS_ACTION_NEVER, true);
 			GPXFile gpxFile = getGpx();
 			if (gpxFile != null && gpxFile.path != null) {
 				final MapMarkersHelper markersHelper = app.getMapMarkersHelper();
@@ -1114,7 +1114,7 @@ public class TrackPointFragment extends OsmandExpandableListFragment implements 
 				} else {
 					description.setVisibility(View.GONE);
 				}
-				icon.setImageDrawable(FavoriteImageDrawable.getOrCreate(getActivity(), groupColor, false, wpt));
+				icon.setImageDrawable(PointImageDrawable.getFromWpt(getActivity(), groupColor, false, wpt));
 
 			} else {
 				boolean showAll = gpxItem == null;
