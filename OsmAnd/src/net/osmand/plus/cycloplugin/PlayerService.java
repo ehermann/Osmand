@@ -25,7 +25,7 @@ public class PlayerService extends Service {
     public static final String TAG = "MPS";
     private MediaSessionCompat mediaSession;
     private IOsmAndAidlInterface mIOsmAndAidlInterface;
-
+    private boolean running=false;
 
 
 
@@ -128,13 +128,15 @@ public class PlayerService extends Service {
             mMediaPlayer.start();
             startService(new Intent(getApplicationContext(), PlayerService.class));
             // Repeat this the same runnable code block again another 2 seconds
-            handler.postDelayed(runnableCode, 10000);
+            if(running)
+                handler.postDelayed(runnableCode, 10000);
         }
     };
 // Start the initial runnable task by posting through the handler
     @Override
     public void onCreate() {
         super.onCreate();
+        running=true;
         bindOSMService();
         ComponentName receiver = new ComponentName(getPackageName(), RemoteReceiver.class.getName());
         mediaSession = new MediaSessionCompat(this, "PlayerService", receiver, null);
@@ -181,7 +183,7 @@ public class PlayerService extends Service {
                     .setState(PlaybackStateCompat.STATE_PLAYING, 0, 1.0f)
                     .setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE).build());
         }
-        return START_NOT_STICKY; // super.onStartCommand(intent, flags, startId);
+        return START_STICKY; // super.onStartCommand(intent, flags, startId);
     }
 
     @Override
@@ -192,6 +194,10 @@ public class PlayerService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Intent intent = new Intent("net.osmand.aidl.OsmandAidlServiceV2");
+        unbindService(mConnection);
+
         mediaSession.release();
+        running=false;
     }
 }

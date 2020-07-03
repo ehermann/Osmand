@@ -67,11 +67,11 @@ import java.util.TreeMap;
 import gnu.trove.list.array.TByteArrayList;
 
 public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.IContextMenuProvider {
-	
+
 	private static final float EPSILON_IN_DPI = 2;
 
 	private OsmandMapTileView view;
-	
+
 	private final RoutingHelper helper;
 	private final TransportRoutingHelper transportHelper;
 	// keep array lists created
@@ -173,7 +173,7 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 				(helper.getFinalLocation() != null && helper.getRoute().isCalculated())) {
 
 			updateAttrs(settings, tileBox);
-			
+
 			int w = tileBox.getPixWidth();
 			int h = tileBox.getPixHeight();
 			Location lastProjection = helper.getLastProjection();
@@ -191,11 +191,11 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 			double leftLongitude = latlonRect.left;
 			double bottomLatitude = latlonRect.bottom;
 			double rightLongitude = latlonRect.right;
-			// double lat = 0; 
-			// double lon = 0; 
-			// this is buggy lat/lon should be 0 but in that case 
+			// double lat = 0;
+			// double lon = 0;
+			// this is buggy lat/lon should be 0 but in that case
 			// it needs to be fixed in case there is no route points in the view bbox
-			double lat = topLatitude - bottomLatitude + 0.1;  
+			double lat = topLatitude - bottomLatitude + 0.1;
 			double lon = rightLongitude - leftLongitude + 0.1;
 			drawLocations(tileBox, canvas, topLatitude + lat, leftLongitude - lon, bottomLatitude - lat, rightLongitude + lon);
 
@@ -220,7 +220,7 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 				canvas.rotate(tileBox.getRotate(), tileBox.getCenterPixelX(), tileBox.getCenterPixelY());
 			}
 		}
-	
+
 	}
 
 	private void updateAttrs(DrawSettings settings, RotatedTileBox tileBox) {
@@ -269,7 +269,7 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 			}
 		}
 	}
-	
+
 	@Override
 	public void onDraw(Canvas canvas, RotatedTileBox tileBox, DrawSettings settings) {}
 
@@ -295,10 +295,17 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 						// int len = (int) (distSegment / pxStep);
 						float pdx = x - px;
 						float pdy = y - py;
+						float scale=attrs.paint3.getStrokeWidth()/(actionArrow.getWidth()/2.25f);
+						float scaledWidth=actionArrow.getWidth();
 						matrix.reset();
 						matrix.postTranslate(0, -actionArrow.getHeight() / 2f);
 						matrix.postRotate((float) angle, actionArrow.getWidth() / 2f, 0);
-						matrix.postTranslate(px + pdx - actionArrow.getWidth() / 2f, py + pdy);
+						if(scale>=1.0f)
+						{
+							matrix.postScale(scale,scale);
+							scaledWidth*=scale;
+						}
+						matrix.postTranslate(px + pdx - scaledWidth/ 2f, py + pdy);
 						canvas.drawBitmap(actionArrow, matrix, paintIconAction);
 					} else {
 						px = x;
@@ -342,7 +349,7 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 		updateAttrs(new DrawSettings(night), view.getCurrentRotatedTileBox());
 		return attrs.paint.getColor();
 	}
-	
+
 	private void cullRamerDouglasPeucker(TByteArrayList survivor, List<Location> points,
 			int start, int end, double epsillon) {
         double dmax = Double.NEGATIVE_INFINITY;
@@ -352,7 +359,7 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 
         for (int i = start + 1; i < end; i++) {
             Location pt = points.get(i);
-            double d = MapUtils.getOrthogonalDistance(pt.getLatitude(), pt.getLongitude(), 
+            double d = MapUtils.getOrthogonalDistance(pt.getLatitude(), pt.getLongitude(),
             		startPt.getLatitude(), startPt.getLongitude(), endPt.getLatitude(), endPt.getLongitude());
             if (d > dmax) {
                 dmax = d;
@@ -769,12 +776,12 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 			}
 		}
 	}
-	
+
 	private static class RouteGeometryZoom {
 		final TByteArrayList simplifyPoints;
 		List<Double> distances;
 		List<Double> angles;
-		
+
 		public RouteGeometryZoom(List<Location> locations, RotatedTileBox tb) {
 			//  this.locations = locations;
 			tb = new RotatedTileBox(tb);
@@ -789,7 +796,7 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 			double distInPix = (tb.getDistance(0, 0, tb.getPixWidth(), 0) / tb.getPixWidth());
 			double cullDistance = (distInPix * (EPSILON_IN_DPI * Math.max(1, tb.getDensity())));
 			cullRamerDouglasPeucker(simplifyPoints, locations, 0, locations.size() - 1, cullDistance);
-			
+
 			int previousIndex = -1;
 			for(int i = 0; i < locations.size(); i++) {
 				double d = 0;
@@ -814,12 +821,12 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 				angles.add(angle);
 			}
 		}
-		
-		
+
+
 		public List<Double> getDistances() {
 			return distances;
 		}
-		
+
 		private void cullRamerDouglasPeucker(TByteArrayList survivor, List<Location> points,
 				int start, int end, double epsillon) {
 	        double dmax = Double.NEGATIVE_INFINITY;
@@ -829,7 +836,7 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 
 	        for (int i = start + 1; i < end; i++) {
 	            Location pt = points.get(i);
-	            double d = MapUtils.getOrthogonalDistance(pt.getLatitude(), pt.getLongitude(), 
+	            double d = MapUtils.getOrthogonalDistance(pt.getLatitude(), pt.getLongitude(),
 	            		startPt.getLatitude(), startPt.getLongitude(), endPt.getLatitude(), endPt.getLongitude());
 	            if (d > dmax) {
 	                dmax = d;
@@ -843,7 +850,7 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 	            survivor.set(end, (byte) 1);
 	        }
 	    }
-		
+
 		public TByteArrayList getSimplifyPoints() {
 			return simplifyPoints;
 		}
@@ -956,7 +963,7 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 			}
 			return zm;
 		}
-		
+
 		private void drawSegments(RotatedTileBox tb, Canvas canvas, double topLatitude, double leftLongitude,
 				double bottomLatitude, double rightLongitude, Location lastProjection, int currentRoute) {
 			if (locations.size() == 0) {
@@ -965,7 +972,7 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 			RouteGeometryZoom geometryZoom = getGeometryZoom(tb);
 			TByteArrayList simplification = geometryZoom.getSimplifyPoints();
 			List<Double> odistances = geometryZoom.getDistances();
-			
+
 			clearArrays();
 			GeometryWayStyle defaultWayStyle = isTransportRoute() ?
 					new GeometryWalkWayStyle(wayContext) :
@@ -1063,9 +1070,9 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 			styles.add(style);
 		}
 	}
-	
+
 	private RouteSimplificationGeometry routeGeometry  = new RouteSimplificationGeometry();
-	
+
 	private void drawRouteSegment(RotatedTileBox tb, Canvas canvas, List<Float> tx, List<Float> ty,
 			List<Double> angles, List<Double> distances, double distToFinish, List<GeometryWayStyle> styles) {
 		if (tx.size() < 2) {
@@ -1098,7 +1105,7 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 			canvas.rotate(tb.getRotate(), tb.getCenterPixelX(), tb.getCenterPixelY());
 		}
 	}
-	
+
 	public void drawLocations(RotatedTileBox tb, Canvas canvas, double topLatitude, double leftLongitude, double bottomLatitude, double rightLongitude) {
 		if (helper.isPublicTransportMode()) {
 			int currentRoute = transportHelper.getCurrentRoute();
@@ -1149,7 +1156,7 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 			}
 		}
 	}
-	
+
 	private double[] calculateProjectionOnRoutePoint(List<Location> routeNodes, RoutingHelper helper, RotatedTileBox box) {
 		double[] projectionXY = null;
 		Location ll = helper.getLastFixedLocation();
@@ -1195,7 +1202,7 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 			double rightLongitude, Location lastProjection, List<Location> routeNodes, int cd,
 			Iterator<RouteDirectionInfo> it, int zoom) {
 		RouteDirectionInfo nf = null;
-		
+
 		double DISTANCE_ACTION = 35;
 		if(zoom >= 17) {
 			DISTANCE_ACTION = 15;
@@ -1205,7 +1212,7 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 			DISTANCE_ACTION = 110;
 		}
 		double actionDist = 0;
-		Location previousAction = null; 
+		Location previousAction = null;
 		List<Location> actionPoints = this.actionPoints;
 		actionPoints.clear();
 		int prevFinishPoint = -1;
@@ -1297,7 +1304,7 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 			}
 		}
 	}
-	
+
 	private Location calculateProjection(double part, Location lp, Location l) {
 		Location p = new Location(l);
 		p.setLatitude(lp.getLatitude() + part * (l.getLatitude() - lp.getLatitude()));
@@ -1310,11 +1317,11 @@ public class RouteLayer extends OsmandMapLayer implements ContextMenuLayer.ICont
 		return helper;
 	}
 
-	
-	
+
+
 	@Override
 	public void destroyLayer() {
-		
+
 	}
 	@Override
 	public boolean drawInScreenPixels() {
